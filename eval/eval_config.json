@@ -1,0 +1,32 @@
+[
+    {
+    "path_to_agent": "logs/ppo_lunar-lander-final.zip",
+    "eval_episodes": 10,
+    "algorithm": "PPO",
+    "environments": ["mo-lunar-lander-v3"]
+    },
+    {
+    "path_to_agent": "logs/ppo_highway-final.zip",
+    "eval_episodes": 10,
+    "algorithm": "PPO",
+    "environments": ["mo-highway-v0"]
+    },
+    {
+    "path_to_agent": "logs/ppo_lunar-lander-final.zip",
+    "eval_episodes": 10,
+    "algorithm": "PPO",
+    "environments": ["LunarLander-v3"]
+    },
+    {
+    "path_to_agent": "logs/ppo_highway-final.zip",
+    "eval_episodes": 10,
+    "algorithm": "PPO",
+    "environments": ["highway-v0"]
+    },
+    {
+    "path_to_agent": "logs/dqn_FrozenLake-final.zip",
+    "eval_episodes": 10,
+    "algorithm": "DQN",
+    "environments": ["FrozenLake-v1"]
+    }
+]
