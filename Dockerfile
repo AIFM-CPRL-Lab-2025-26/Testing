@@ -12,7 +12,7 @@ RUN dnf install -y kernel-devel-matched kernel-headers
 RUN dnf config-manager addrepo -y --from-repofile=https://developer.download.nvidia.com/compute/cuda/repos/fedora43/x86_64/cuda-fedora43.repo -y  && dnf clean expire-cache
 
 # Install Drivers
-RUN dnf install -y nvidia-open cuda-drivers
+RUN dnf install -y cuda-drivers
 
 # Install compilers required for Numpy & pyGame
 RUN dnf install -y g++ clang
