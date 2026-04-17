@@ -1,5 +1,7 @@
 FROM fedora:43
 
+COPY environment /testing
+
 # Make sure all packages are up to date
 RUN dnf update -y
 # Install basic packages
