@@ -4,6 +4,16 @@ FROM fedora:43
 RUN dnf update -y
 # Install basic packages
 RUN dnf install -y git gcc python3 python3-devel SDL2 SDL2-devel meson
+
+# Install needed baseline Drivers
+RUN dnf install -y kernel-devel-matched kernel-headers
+
+# Install Driver Repository
+RUN dnf config-manager addrepo -y --from-repofile=https://developer.download.nvidia.com/compute/cuda/repos/${distro}/${arch}/cuda-${distro}.repo -y  && dnf clean expire-cache
+
+# Install Drivers
+RUN dnf install -y nvidia-open cuda-drivers
+
 # Install compilers required for Numpy & pyGame
 RUN dnf install -y g++ clang
 
