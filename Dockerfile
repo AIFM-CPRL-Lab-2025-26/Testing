@@ -3,7 +3,7 @@ FROM fedora:43
 COPY environment /testing
 COPY eval-start.sh /etc/eval-start.sh
 
-RUN chmod +x /etc/eval_start.sh
+RUN chmod +x /etc/eval-start.sh
 
 
 # Make sure all packages are up to date
