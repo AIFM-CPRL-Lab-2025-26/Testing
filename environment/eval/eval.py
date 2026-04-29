@@ -30,8 +30,9 @@ def get_reward_score(env_name, reward):
         episode_reward += float(reward)
     return episode_reward
 
-def run_task(agent_path, env, eval_episodes, algo, env_name):
-    model = initialize_agent_policy(agent_path, env, algo) # You can define your model in this function.
+def run_task(agent_path, eval_episodes, env_name):
+    env = initialize_agent_environment(env_name)
+    model = initialize_agent_policy(agent_path, env) # You can define your model in this function.
 
     episode_rewards = []
     weighted_rewards = []
@@ -44,11 +45,13 @@ def run_task(agent_path, env, eval_episodes, algo, env_name):
                 total = np.zeros(4)
             elif env_name == "mo-highway-v0":
                 total = np.zeros(3)
+        # states and episode start are needed for recurrent policies
         lstm_states = None
-        episode_start = np.atleast_1d(True)
+        episode_start = np.array(True)
 
         obs, _ = env.reset(seed=SEED+i)
         episode_reward = 0.0
+        # please note that non-recurrent policies just ignore the state, episode_start argument
         for _ in range(10000):
             action, lstm_states = model.predict(
                 obs,
@@ -56,14 +59,14 @@ def run_task(agent_path, env, eval_episodes, algo, env_name):
                 episode_start=episode_start,
                 deterministic=True
             )
-            obs, reward, terminated, truncated, _ = env.step(int(action))
+            obs, reward, terminated, truncated, _ = env.step(action.item())
             if isinstance(reward, np.ndarray):
                 total += reward
                 episode_reward += float(np.sum(reward))
                 weighted_reward += get_reward_score(env_name, reward)
             else:
                 episode_reward += float(reward)
-            episode_start = np.atleast_1d(False)
+            episode_start = np.array([terminated or truncated])
             if (terminated is True) or (truncated is True):
                 episode_rewards.append(episode_reward)
                 if isinstance(reward, np.ndarray):
@@ -91,14 +94,14 @@ def leaderboard_eval(agent_path, eval_episodes, algo, environments):
 
     for env_name in tqdm(environments, desc="Evaluating"):
         print(f"Evaluating on Task {env_name}.")
-        env = gym.make(env_name, render_mode=None)
+        #env = gym.make(env_name, render_mode=None)
         #if env_name.startswith("mo-"):
         #    env = LinearReward(env)
-        out = run_task(agent_path, env, eval_episodes, algo, env_name)
+        out = run_task(agent_path, eval_episodes, env_name)
         out_data[env_name] = out
         print(f"Finished evaluating on Task {env_name}.")
         print(f"Closing {env_name}")
-        env.close()
+        #env.close()
 
     return out_data
 
